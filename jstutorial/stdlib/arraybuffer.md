@@ -318,7 +318,7 @@ var amountDueView = new Float32Array(buffer, 20, 1);
 
 这种数据结构可以用如下的C语言描述：
 
-{% highlight c %}
+```c
 
 struct someStruct {
   unsigned long id;

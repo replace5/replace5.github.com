@@ -322,7 +322,7 @@ _.bind(o.m,{p:1})()
 
 除了前两个参数以外，bind方法还可以接受更多参数，它们表示函数方法运行时所需的参数。
 
-{% highlight javascript%}
+```javascript
 
 var add = function(n1,n2,n3) {
   console.log(this.sum + n1 + n2 + n3);

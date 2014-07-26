@@ -46,7 +46,7 @@ IE 7则是这样：
 
 然后，就可以针对不同的CSS class，指定不同的样式。
 
-{% highlight css %}
+```css
 
 .button {
    background: #000;
