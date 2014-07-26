@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Document</title>
+</head>
+<body>
+<script src="js/ajax.js"></script>
+<script src="js/loadimage.js"></script>
+<script src="js/waterfall.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    img {
+        display: block;
+        vertical-align: middle;
+    }
+    ul, li {
+        list-style: none;
+    }
+    #test {
+        width: 1260px;
+        margin: 30px auto;
+    }
+    #test li {
+        min-height: 50px;
+        padding: 10px;
+        width: 280px;
+        background: #f5f5f5;
+        border-radius: 3px;
+        float: left;
+        display: block;
+    }
+    .after_waterfall li {
+        float: none;
+    }
+</style>
+<ul id="test">
+    <li><img src="http://pic.tingbuxia.com/120423/9164_0021335180134.jpg" width="280" height="418" data-i="0"></li>
+    <li><img src="http://pic.tingbuxia.com/121213/9447_0041355401836.jpg" width="280" height="420" data-i="1"></li>
+    <li><img src="http://pic.tingbuxia.com/121213/9444_0121355401750.jpg" width="280" height="186" data-i="2"></li>
+    <li><img src="http://pic.tingbuxia.com/120601/9320_0061338557292.jpg" width="280" height="408" data-i="3"></li>
+    <li><img src="http://pic.tingbuxia.com/120813/9416_0041344791337.jpg" width="280" height="420" data-i="4"></li>
+    <li><img src="http://pic.tingbuxia.com/121213/9446_0061355401820.jpg" width="280" height="420" data-i="5"></li>
+    <li><img src="http://pic.tingbuxia.com/121213/9445_0161355401804.jpg" width="280" height="185" data-i="6"></li>
+    <li><img src="http://pic.tingbuxia.com/121213/9444_0041355401743.jpg" width="280" height="420" data-i="7"></li>
+    <li><img src="http://pic.tingbuxia.com/121213/9444_0161355401755.jpg" width="280" height="186" data-i="8"></li>
+    <li><img src="http://pic.tingbuxia.com/120601/9319_0011338557276.jpg" width="280" height="167" data-i="9"></li>
+    <li><img src="http://pic.tingbuxia.com/120605/9339_0081338907412.jpg" width="280" height="417" data-i="10"></li>
+    <li><img src="http://pic.tingbuxia.com/120605/9338_0061338907380.jpg" width="280" height="416" data-i="11"></li>
+</ul>
+<script>
+    var container = document.getElementById("test");
+    var wt = waterfall({
+        padding: 10,
+        cloumn_width: 300,
+        container: container
+    });
+    window.onscroll = function() {
+        var clientHeight = document.documentElement.clientHeight,
+            scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop),
+            scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+        if (scrollHeight - clientHeight - scrollTop < 100) {
+            loadData();
+        }
+    }
+    function loadData() {
+        ajax({
+            url: 'data/data.json',
+            complete: function(err, data) {
+                if (!err) {
+                    wt.append(function() {
+                        var eles = [];
+                        for (var i = 0, len = data.items.length; i< len; i ++) {
+                            if (Math.random() > 0.4) {continue;}
+                            var item = data.items[i];
+                            var li = document.createElement('li');
+                            var img = document.createElement("img");
+                            img.src = item.src;
+                            img.width = 280;
+                            img.height = item.height*280/item.width;
+                            li.appendChild(img);
+                            eles.push(li);
+                        }
+                        return eles;
+                    });
+                }
+            }
+        })
+    }
+    // loadImage(container, function(img, width, height, index) {
+    //     img.width = 280;
+    //     img.height = height*280/width;
+    //     img.setAttribute('data-i', index);
+    // });
+</script>
+</body>
+</html>
