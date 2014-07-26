@@ -1,10 +1,4 @@
----
-title: 运算符
-layout: page
-category: grammar
-date: 2013-02-04
-modifiedOn: 2014-02-04
----
+
 
 运算符是用来处理数据的基本方法。JavaScript与其他编程语言一样，提供了多种运算符。
 
