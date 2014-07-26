@@ -1,5 +1,5 @@
 ---
-title: Node对象
+title: Node
 layout: page
 category: dom
 date: 2013-10-07
@@ -29,7 +29,7 @@ DOCUMENT_TYPE_NODE | 文档类型节点 | 文档的类型（比如&lt;!DOCTYPE h
 
 nodeName属性返回节点的名称，nodeType属性返回节点的常数值。具体的返回值，可查阅下方的表格。
 
-类型 | nodeName | nodeType 
+类型 | nodeName | nodeType
 -----|----------|---------
 DOCUMENT_NODE | #document | 9
 ELEMENT_NODE | 大写的HTML元素名 | 1
@@ -578,7 +578,7 @@ var h = box.getBoundingClientRect().height;
 
 注意，getBoundingClientRect方法的所有属性，都把边框（border属性）算作元素的一部分。也就是说，都是从边框外缘的各个点来计算。因此，width和height包括了元素本身+padding+border。
 
-所有浏览器都支持这个方法，但是IE 6到8对这个对象的支持不完整。 
+所有浏览器都支持这个方法，但是IE 6到8对这个对象的支持不完整。
 
 ### table元素
 
@@ -735,4 +735,4 @@ document.queryselector('ul').(docFrag.cloneNode(true));
 - David Walsh, [HTML5 classList API](http://davidwalsh.name/classlist)
 - Derek Johnson, [The classList API](http://html5doctor.com/the-classlist-api/)
 - Mozilla Developer Network, [element.dataset API](http://davidwalsh.name/element-dataset)
-- David Walsh, [The element.dataset API](http://davidwalsh.name/element-dataset) 
+- David Walsh, [The element.dataset API](http://davidwalsh.name/element-dataset)
