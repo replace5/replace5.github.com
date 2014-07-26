@@ -359,7 +359,7 @@ http.createServer(function (req, res) {
 
 PHP代码实例。
 
-{% highlight php %}
+```php
 
 <?php
 header('Content-Type: text/event-stream');
