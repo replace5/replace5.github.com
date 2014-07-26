@@ -24,31 +24,31 @@ Mutation Observer有以下特点：
 
 目前，Firefox（14+）、 Chrome(26+)、Opera（15+）、IE（11+）和Safari（6.1+）支持这个API。Safari 6.0和Chrome 18-25使用这个API的时候，需要加上WebKit前缀（WebKitMutationObserver）。可以使用下面的表达式，检查当前浏览器是否支持这个API。
 
-{% highlight javascript %}
+```javascript
 
 var MutationObserver = window.MutationObserver ||
-        window.WebKitMutationObserver || 
+        window.WebKitMutationObserver ||
         window.MozMutationObserver;
 
 var observeMutationSupport = !!MutationObserver;
 
-{% endhighlight %}
+```
 
 ## 使用方法
 
 首先，使用MutationObserver构造函数，新建一个实例，同时指定这个实例的回调函数。
 
-{% highlight javascript %}
+```javascript
 
 var observer = new MutationObserver( callback );
 
-{% endhighlight %}
+```
 
 ### observe方法
 
 observe方法指定所要观察的DOM元素，以及所要观察的特定变动。
 
-{% highlight javascript %}
+```javascript
 
 var article = document.querySelector( 'article' );
 
@@ -59,7 +59,7 @@ var  options = {
 
 observer.observe( article, options );
 
-{% endhighlight %}
+```
 
 上面代码首先指定，所要观察的DOM元素是article，然后，指定所要观察的变动是子元素变动和属性变动。最后，将这两个限定条件作为参数，传入observer对象的observe方法。
 
@@ -82,19 +82,19 @@ Mutation Observer所观察的DOM变动（即上面代码的option对象），包
 
 disconnect方法用来停止观察。发生相应变动时，不再调用回调函数。
 
-{% highlight javascript %}
+```javascript
 
 observer.disconnect();
 
-{% endhighlight %}
+```
 
 takeRecords方法用来清除变动记录，即不再处理未处理的变动。
 
-{% highlight javascript %}
+```javascript
 
 observer.takeRecords();
 
-{% endhighlight %}
+```
 
 ### MutationRecord对象
 
@@ -117,11 +117,11 @@ MutationRecord对象包含了DOM的相关信息，有如下属性：
 
 下面的例子说明如何读取变动记录。
 
-{% highlight javascript %}
+```javascript
 
 var callback = function(records){
     records.map(function(record){
-    	console.log('Mutation type: ' + record.type); 
+    	console.log('Mutation type: ' + record.type);
     	console.log('Mutation target: ' + record.target);
     });
 };
@@ -129,13 +129,13 @@ var callback = function(records){
 var mo = new MutationObserver(callback);
 
 var option = {
-    'childList': true, 
+    'childList': true,
     'subtree': true
 };
 
 mo.observe(document.body, option);
 
-{% endhighlight %}
+```
 
 上面代码的观察器，观察body元素的所有下级元素（childList表示观察子元素，subtree表示观察子元素的下级元素）的变动。回调函数会在控制台显示所有变动的类型和目标元素。
 
@@ -143,11 +143,11 @@ mo.observe(document.body, option);
 
 下面的例子说明如何追踪属性的变动。
 
-{% highlight javascript %}
+```javascript
 
 var callback = function(records){
     records.map(function(record){
-    	console.log('Previous attribute value: ' + record.oldValue);  
+    	console.log('Previous attribute value: ' + record.oldValue);
     });
 };
 
@@ -157,12 +157,12 @@ var element = document.getElementById('#my_element');
 
 var options = {
     'attributes': true,
-    'attributeOldValue': true 
+    'attributeOldValue': true
 }
 
 mo.observe(element, options);
 
-{% endhighlight %}
+```
 
 上面代码先设定追踪属性变动（'attributes': true），然后设定记录变动前的值。实际发生变动时，会将变动前的值显示在控制台。
 

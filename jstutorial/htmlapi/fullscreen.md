@@ -16,37 +16,37 @@ modifiedOn: 2014-01-29
 
 requestFullscreen方法使得浏览器全屏。
 
-{% highlight javascript %}
+```javascript
 
 function launchFullscreen(element) {
   if(element.requestFullscreen) {
     element.requestFullscreen();
   } else if(element.mozRequestFullScreen) {
     element.mozRequestFullScreen();
-  } else if(element.msRequestFullscreen){ 
-	element.msRequestFullscreen();  
+  } else if(element.msRequestFullscreen){
+	element.msRequestFullscreen();
   } else if(element.webkitRequestFullscreen) {
     element.webkitRequestFullScreen();
   }
 }
 
-{% endhighlight %}
+```
 
 使用的时候，可以针对整个网页，也可以针对某个网页元素。
 
-{% highlight javascript %}
+```javascript
 
-launchFullscreen(document.documentElement); 
+launchFullscreen(document.documentElement);
 
-launchFullscreen(document.getElementById("videoElement")); 
+launchFullscreen(document.getElementById("videoElement"));
 
-{% endhighlight %}
+```
 
 ### exitFullscreen()
 
 exitFullscreen方法用于取消全屏（带有浏览器前缀）。
 
-{% highlight javascript %}
+```javascript
 
 function exitFullscreen() {
 	if (document.exitFullscreen) {
@@ -62,7 +62,7 @@ function exitFullscreen() {
 
 exitFullscreen();
 
-{% endhighlight %}
+```
 
 ## 属性
 
@@ -70,20 +70,20 @@ exitFullscreen();
 
 该属性返回正处于全屏状态的网页元素。
 
-{% highlight javascript %}
+```javascript
 
 var fullscreenElement =
 	document.fullscreenElement ||
 	document.mozFullScreenElement ||
 	document.webkitFullscreenElement;
 
-{% endhighlight %}
+```
 
 ### document.fullscreenEnabled
 
 该属性返回一个布尔值，表示当前是否处于全屏状态。
 
-{% highlight javascript %}
+```javascript
 
 var fullscreenEnabled =
 	document.fullscreenEnabled ||
@@ -91,7 +91,7 @@ var fullscreenEnabled =
 	document.webkitFullscreenEnabled ||
 	document.msFullscreenEnabled;
 
-{% endhighlight %}
+```
 
 ## 全屏状态的CSS
 
@@ -125,7 +125,7 @@ var fullscreenEnabled =
   height: 100%;
 }
 
-{% endhighlight %}
+```
 
 ## 参考链接
 

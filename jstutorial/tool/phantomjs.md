@@ -12,25 +12,25 @@ modifiedOn: 2013-08-07
 
 PhantomJS是二进制程序，需要[安装](http://phantomjs.org/download.html)后使用。使用下面的命令，查看是否安装成功。
 
-{% highlight javascript %}
+```javascript
 
 phantomjs --version
 
-{% endhighlight %}
+```
 
 ## Javascript运行环境
 
 phantomjs提供了一个完整的Javascript运行环境。键入phantomjs，就进入了该环境。
 
-{% highlight bash %}
+```bash
 
 $ phantomjs
 
-{% endhighlight %}
+```
 
 这时会跳出一个phantom提示符，就可以输入Javascript命令了。
 
-{% highlight bash %}
+```bash
 
 phantomjs> 1+2
 3
@@ -41,15 +41,15 @@ undefined
 phantomjs> add(1,2)
 3
 
-phantomjs> 
+phantomjs>
 
-{% endhighlight %}
+```
 
 按ctrl+c可以退出该环境。
 
 下面，我们把上面的add()函数写成一个文件add.js文件。
 
-{% highlight javascript %}
+```javascript
 
 // add.js
 
@@ -59,17 +59,17 @@ console.log(add(1,2));
 
 phantom.exit();
 
-{% endhighlight %}
+```
 
 上面的代码中，console.log()的作用是在终端窗口显示，phantom.exit()则表示退出phantomjs环境。一般来说，不管什么样的程序，这一行都不能少。
 
 现在，运行该程序：
 
-{% highlight bash %}
+```bash
 
 $ phantomjs add.js
 
-{% endhighlight %}
+```
 
 终端窗口就会显示结果为3。
 
@@ -81,7 +81,7 @@ $ phantomjs add.js
 
 新建一个文本文件page.js，写入下面的代码：
 
-{% highlight javascript %}
+```javascript
 
 // page.js
 
@@ -92,7 +92,7 @@ page.open('http://slashdot.org', function (s) {
     phantom.exit();
 });
 
-{% endhighlight %}
+```
 
 第一行require('webpage').create() 表示加载网页模块，并创建一个实例。
 
@@ -104,7 +104,7 @@ page.open('http://slashdot.org', function (s) {
 
 system模块可以加载操作系统变量，system.args就是参数数组。
 
-{% highlight javascript %}
+```javascript
 
 var page = require('webpage').create(),
     system = require('system'),
@@ -128,21 +128,21 @@ page.open(address, function (status) {
     phantom.exit();
 });
 
-{% endhighlight %}
+```
 
 使用方法如下：
 
-{% highlight javascript %}
+```javascript
 
 phantomjs page.js http://www.google.com
 
-{% endhighlight %}
+```
 
 ### 截图
 
 最简单的生成网页截图的方法如下：
 
-{% highlight javascript %}
+```javascript
 
 var page = require('webpage').create();
 page.open('http://google.com', function () {
@@ -150,13 +150,13 @@ page.open('http://google.com', function () {
     phantom.exit();
 });
 
-{% endhighlight %}
+```
 
 page对象代表一个网页实例；open方法表示打开某个网址，它的第一个参数是目标网址，第二个参数是网页载入成功后，运行的回调函数;render方法则是渲染页面，然后以图片格式输出，该方法的参数就是输出的图片文件名。
 
 除了简单截图以外，还可以设置各种截图参数。
 
-{% highlight javascript %}
+```javascript
 
 var page = require('webpage').create();
 page.open('http://google.com', function () {
@@ -165,13 +165,13 @@ page.open('http://google.com', function () {
     phantom.exit();
 });
 
-{% endhighlight %}
+```
 
 zoomFactor表示将截图缩小至原图的25%大小；renderBase64方法则是表示将截图（PNG格式）编码成Base64格式的字符串输出。
 
 下面的例子则是使用了更多参数。
 
-{% highlight javascript %}
+```javascript
 
 // page.js
 
@@ -204,7 +204,7 @@ page.open('http://slashdot.org', function (status) {
 
 });
 
-{% endhighlight %}
+```
 
 上面代码中的几个属性和方法解释如下：
 
@@ -218,32 +218,32 @@ page.open('http://slashdot.org', function (status) {
 
 使用官方网站提供的[rasterize.js](https://github.com/ariya/phantomjs/blob/master/examples/rasterize.js)，可以抓取网络上的图片，将起保存在本地。
 
-{% highlight javascript %}
+```javascript
 
 phantomjs rasterize.js http://ariya.github.com/svg/tiger.svg tiger.png
 
-{% endhighlight %}
+```
 
 使用[rasterize.js](https://github.com/ariya/phantomjs/blob/master/examples/rasterize.js)，还可以将网页保存为pdf文件。
 
-{% highlight javascript %}
+```javascript
 
 phantomjs rasterize.js 'http://en.wikipedia.org/w/index.php?title=Jakarta&printable=yes' jakarta.pdf
 
-{% endhighlight %}
+```
 
 ## 生成网页
 
 phantomjs可以生成网页，使用content方法指定网页的HTML代码。
 
-{% highlight javascript %}
+```javascript
 
 var page = require('webpage').create();
 page.viewportSize = { width: 400, height : 400 };
 page.content = '<html><body><canvas id="surface"></canvas></body></html>';
 phantom.exit();
 
-{% endhighlight %}
+```
 
 官方网站有一个[例子](https://github.com/ariya/phantomjs/blob/master/examples/colorwheel.js)，通过创造svg图片，然后截图保存成png文件。
 

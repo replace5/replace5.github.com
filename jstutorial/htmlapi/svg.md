@@ -18,43 +18,43 @@ SVG图像可以用Adobe公司的Illustrator软件、开源软件Inkscape等生�
 
 SVG插入HTML网页，可以用在img标签、embed标签、CSS的background-image属性，也可以插在其他DOM元素中。
 
-{% highlight html %}
+```html
 
 <img src="circle.svg">
 <object id="object" data="circle.svg" type="image/svg+xml"></object>
 <embed id="embed" src="icon.svg" type="image/svg+xml">
 <iframe id="iframe" src="icon.svg"></iframe>
 
-{% endhighlight %}
+```
 
 上面是四种插入SVG图像的方式。
 
 下面是在其他DOM元素中插入SVG文件的一个例子。先在HTML网页中建立一个容器。
 
-{% highlight html %}
+```html
 
 <div id="stage"></div>
 
-{% endhighlight %}
+```
 
 然后，使用jQuery将SVG图像插入网页元素。
 
-{% highlight javascript %}
+```javascript
 
 $(function(){
- 
+
 $("#stage").load('interactive.svg',function(response){
- 
+
         $(this).addClass("svgLoaded");
-         
+
         if(!response){
             // 加载没有成功的处理代码
         }
- 
+
     });
 });
 
-{% endhighlight %}
+```
 
 ## svg格式
 
@@ -73,7 +73,7 @@ $("#stage").load('interactive.svg',function(response){
 
 ```html
 
-<svg>   
+<svg>
 	<circle cx="60" cy="60" r="50" stroke="black" stroke-width="5" fill="silver"/>
 </svg>
 
@@ -81,13 +81,13 @@ $("#stage").load('interactive.svg',function(response){
 
 上面代码画出一个圆。cx和cy是圆心的坐标，r是圆的半径。
 
-{% highlight html %}
+```html
 
 <svg>
     <rect x="0" y="0" height="100" width="200" style="stroke: #70d5dd; fill: #dd524b" />
 </svg>
 
-{% endhighlight %}
+```
 
 上面代码画出一个长100像素、宽200像素的矩形。
 
@@ -121,8 +121,8 @@ $("#stage").load('interactive.svg',function(response){
 
 ```html
 
-<svg>  	
-	<path id="path1" d="M160.143,196c0,0,62.777-28.033,90-17.143c71.428,28.572,73.952-25.987,84.286-21.428" style="fill:none;stroke:2;"></path>  
+<svg>
+	<path id="path1" d="M160.143,196c0,0,62.777-28.033,90-17.143c71.428,28.572,73.952-25.987,84.286-21.428" style="fill:none;stroke:2;"></path>
 </svg>
 
 ```
@@ -133,41 +133,41 @@ $("#stage").load('interactive.svg',function(response){
 
 如果使用img标签插入SVG文件，则无法获取SVG DOM。其他使用object、iframe、embed标签的获取方法如下。
 
-{% highlight javascript %}
+```javascript
 
 var svgObject = document.getElementById("object").contentDocument;
 var svgIframe = document.getElementById("iframe").contentDocument;
-var svgEmbed = document.getElementById("embed").getSVGDocument(); 
+var svgEmbed = document.getElementById("embed").getSVGDocument();
 
-{% endhighlight %}
+```
 
 由于svg文件就是一般的XML文件，因此可以用DOM方法，选取页面元素。
 
 改变填充色。
 
-{% highlight javascript %}
+```javascript
 
 document.getElementById("theCircle").style.fill = "red";
 
-{% endhighlight %}
+```
 
 改变元素属性。
 
-{% highlight javascript %}
+```javascript
 
 document.getElementById("theCircle").setAttribute("class", "changedColors");
 
-{% endhighlight %}
+```
 
 绑定事件回调函数。
 
-{% highlight javascript %}
+```javascript
 
 document.getElementById("theCircle").addEventListener("click", function() {
    console.log("clicked")
 });
 
-{% endhighlight %}
+```
 
 ## svg文件处理
 
@@ -177,7 +177,7 @@ document.getElementById("theCircle").addEventListener("click", function() {
 
 假定网页中有一个svg元素。
 
-{% highlight html %}
+```html
 
 <div id="svg-container">
 	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" width="500" height="440">
@@ -185,21 +185,21 @@ document.getElementById("theCircle").addEventListener("click", function() {
 	</svg>
 </div>
 
-{% endhighlight %}
+```
 
 使用XMLSerializer实例的serializeToString方法，获取svg元素的代码。
 
-{% highlight javascript %}
+```javascript
 
 var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
 
-{% endhighlight %}
+```
 
 ### 将svg图像转为canvas图像
 
 首先，需要新建一个img对象，将svg图像指定到该img对象的src属性。
 
-{% highlight javascript %}
+```javascript
 
 var img = new Image();
 var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
@@ -209,11 +209,11 @@ var url = DOMURL.createObjectURL(svg);
 
 img.src = url;
 
-{% endhighlight %}
+```
 
 然后，当图像加载完成后，再将它绘制到canvas元素。
 
-{% highlight javascript %}
+```javascript
 
 img.onload = function() {
 	var canvas = document.getElementById("canvas");
@@ -221,7 +221,7 @@ img.onload = function() {
     ctx.drawImage(img, 0, 0);
 };
 
-{% endhighlight %}
+```
 
 ## 参考链接
 
