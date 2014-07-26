@@ -69,7 +69,7 @@
     function loadData() {
         ajax({
             url: 'data/data.json',
-            method: 'GET',
+            type: 'GET',
             complete: function(err, data) {
                 if (!err) {
                     wt.append(function() {
