@@ -1,10 +1,3 @@
----
-title: 运算符
-layout: page
-category: grammar
-date: 2013-02-04
-modifiedOn: 2014-02-04
----
 
 运算符是用来处理数据的基本方法。JavaScript与其他编程语言一样，提供了多种运算符。
 
@@ -139,7 +132,7 @@ isOdd(-4) // false
 
 {% highlight javascript %}
 
-6.5 % 2.1 
+6.5 % 2.1
 // 0.19999999999999973
 
 {% endhighlight %}
@@ -205,16 +198,16 @@ x1++ // 1
 
 {% highlight javascript %}
 
-x += y; 
+x += y;
 // 等同于 x = x + y
 
-x -= y 
+x -= y
 // 等同于 x = x - y
 
-x *= y 
+x *= y
 // 等同于 x = x * y
 
-x /= y 
+x /= y
 // 等同于 x = x / y
 
 x %= y
@@ -777,7 +770,7 @@ rgb2hex(color.r,color.g,color.b)
 
 4 >> 1
 // 2
-/* 
+/*
 // 因为4的二进制形式为00000000000000000000000000000100，
 // 右移一位得到00000000000000000000000000000010，
 // 即为十进制的2
@@ -855,7 +848,7 @@ if (flags & FLAG_C) { // 0101 & 0100 => 0100 => true
 
 {% highlight javascript %}
 
-flags |= mask; 
+flags |= mask;
 
 {% endhighlight %}
 
@@ -863,7 +856,7 @@ flags |= mask;
 
 {% highlight javascript %}
 
-flags &= mask; 
+flags &= mask;
 
 {% endhighlight %}
 
@@ -871,7 +864,7 @@ flags &= mask;
 
 {% highlight javascript %}
 
-flags = flags ^ mask; 
+flags = flags ^ mask;
 
 {% endhighlight %}
 
@@ -1049,7 +1042,7 @@ JavaScript各种运算符的优先级别（Operator Precedence）是不一样的
 
 {% highlight javascript %}
 
-5 + 2 * 4 / 2 % 3 + 10 - 3 
+5 + 2 * 4 / 2 % 3 + 10 - 3
 
 total = 5;
 total *= 2 + 3
@@ -1083,7 +1076,7 @@ q = a?b:c?d:e?f:g;
 
 {% highlight javascript %}
 
-w = (x = (y = z)); 
+w = (x = (y = z));
 q = a?b:(c?d:(e?f:g));
 
 {% endhighlight %}
