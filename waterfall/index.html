@@ -5,14 +5,6 @@
 <title>瀑布流</title>
 <script src="../src/loadScript.js"></script>
 <script>
-(function() {
-    var test = document.getElementById("test");
-    console.log(test, test && test.getElementsByTagName("li").length, document.getElementsByTagName("li").length);
-    if (test.getElementsByTagName("li").length < 12 ) {
-        setTimeout(arguments.callee, 10);
-
-    }
-})();
     loadScript(
         [
             '../src/waterfall'
