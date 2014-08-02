@@ -8,7 +8,10 @@
 (function() {
     var test = document.getElementById("test");
     console.log(test, test && test.getElementsByTagName("li").length, document.getElementsByTagName("li").length);
-    setTimeout(arguments.callee, 10);
+    if (test.getElementsByTagName("li").length < 12 ) {
+        setTimeout(arguments.callee, 10);
+
+    }
 })();
     loadScript(
         [
