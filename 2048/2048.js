@@ -31,23 +31,23 @@
         }
     }
 
-    function _addEvent(elm, type, data, fn) {
+    function _addEvent(elm, type, fn, ct, data) {
         if (elm.addEventListener) {
-            _addEvent = function(elm, type, data, fn) {
+            _addEvent = function(elm, type, fn, ct, data) {
                 elm["e" + type + fn] = fn;
                 elm[type + fn] = function(evt) {
                     evt.data = data;
-                    elm["e" + type + fn](evt);
+                    elm["e" + type + fn].call(ct || window, evt);
                 }
                 return elm.addEventListener(type, elm[type + fn], false);
             }
         } else {
-            _addEvent = function(elm, type, data, fn) {
+            _addEvent = function(elm, type, fn, ct, data) {
                 elm["e" + type + fn] = fn;
                 elm[type + fn] = function() {
                     var evt = window.event;
                     evt.data = data;
-                    elm["e" + type + fn](evt);
+                    elm["e" + type + fn].call(ct, evt);
                 }
                 return elm.attachEvent('on' + type, elm[type + fn]);
             }
@@ -83,13 +83,17 @@
         }
     }
 
+    var SUPPORT_TOUCH  = ('ontouchstart' in document.documentElement);
     function _Drag(elm, callback, context, data) {
-        _addEvent(elm, 'mousedown', {
+        if (arguments.length === 1) {
+            _removeEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent);
+        }
+        _addEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent, null, {
             cb: callback,
             ct: context,
             elm: elm,
             data: data
-        }, _DragEvent);
+        });
     }
 
     function _DragEvent(evt) {
@@ -99,14 +103,22 @@
         data.x = evt.pageX || evt.clientX + scroll.left;
         data.y = evt.pageY || evt.clientY + scroll.top;
 
+        try {
+            evt.returnVale = false;
+        } catch(e) {
+            evt.preventDefault();
+        }
+
         switch(evt.type) {
+            case 'touchend':
             case 'mouseup':
                 data.type = 'endDrag';
-                _removeEvent(document, 'mousemove', _DragEvent);
-                _removeEvent(document, 'mouseup', _DragEvent);
+                _removeEvent(document, SUPPORT_TOUCH ? 'touchmove' :'mousemove', _DragEvent);
+                _removeEvent(document, SUPPORT_TOUCH ? 'touchend' :'mouseup', _DragEvent);
                 data.cb.call(data.ct, data, evt);
                 data = evt = null;
             break;
+            case 'touchmove':
             case 'mousemove':
                 data.type = 'moveDrag';
                 data.dx = data.x - data.offsetX;
@@ -120,8 +132,8 @@
                 data.dx = 0;
                 data.dy = 0;
                 if (data.cb.call(data.ct, data)) {
-                    _addEvent(document, 'mousemove', data, _DragEvent);
-                    _addEvent(document, 'mouseup', data, _DragEvent);
+                    _addEvent(document, SUPPORT_TOUCH ? 'touchmove' : 'mousemove', _DragEvent, null, data);
+                    _addEvent(document, SUPPORT_TOUCH ? 'touchend' : 'mouseup', _DragEvent, null, data);
                 }
             break;
         }
@@ -129,11 +141,11 @@
 
     function C2048(container) {
         this.container = container;
-        this.areaSize = 100;
-        this.padding = 10;
-        this.areas = [];
-        this.doms = {};
-        this.score = 0;
+        this.areaSize = 100;   // 每个方块的尺寸
+        this.padding = 10;     // 方块间距
+        this.areas = [];       // 方块区域缓存
+        this.doms = {};        // dom缓存
+        this.score = 0;        // 分数缓存
         this.init();
     }
 
@@ -144,8 +156,10 @@
         this.bindEvent();
         this.start();
     }
+    // 重置并重新开始
     fn.reset = function() {
         var doms = this.doms;
+        this.unBindEvent();
         doms.main.parentNode.removeChild(doms.main);
         doms.score.parentNode.removeChild(doms.score);
         this.areas = [];
@@ -153,8 +167,9 @@
         this.score = 0;
         this.init();
     }
+    // 构建矩阵数组
     fn.buildMatrix = function() {
-        var num = 4,
+        var num = 4,  // 矩阵尺寸
             count = 0,
             matrix = [];
 
@@ -169,10 +184,12 @@
         this.count = count;
         this.matrix = matrix;
     }
+    // 构建界面
     fn.build = function() {
         this.buildMain();
         this.buildScore();
     }
+    // 构建分数界面
     fn.buildScore = function() {
         var score = document.createElement('div');
         _setStyle(score, {
@@ -192,6 +209,7 @@
         this.doms.score = score;
         this.container.appendChild(score);
     }
+    // 构建游戏主界面
     fn.buildMain = function() {
         var main = document.createElement('div');
 
@@ -202,6 +220,7 @@
         this.buildAllAreas();
         this.setMainSize();
     }
+    // 设置主界面尺寸
     fn.setMainSize = function() {
          _setStyle(this.doms.main, {
             userSelect: 'none',
@@ -209,6 +228,7 @@
             height: this.areaSize * 4 + this.padding * 3 + 'px'
         })
     }
+    // 构建所有游戏区块
     fn.buildAllAreas = function() {
         var area,
             i = 0;
@@ -227,6 +247,7 @@
             i++;
         }
     }
+    // 创建单个区块，isBg为背景区块
     fn.buildSquare = function(i, isBg) {
         var area = this.getArea(i),
             elm = document.createElement('div');
@@ -247,9 +268,11 @@
         this.doms.main.appendChild(elm);
         return elm;
     }
+    // 获取单个区块数据
     fn.getArea = function(i) {
         return this.areas[i];
     }
+    // 获取空区块数组
     fn.getEmptyArea = function() {
         var result = [];
         this.map(function(area) {
@@ -259,6 +282,11 @@
         });
         return result;
     }
+    // 区块是否为空
+    fn.isAreaEmpty = function(i) {
+        return !this.getArea(i).elm;
+    }
+    // 在剩余空区块中随机
     fn.randomIndex = function() {
         var i = Math.floor(Math.random() * this.count);
         if (this.isAreaEmpty(i)) {
@@ -267,14 +295,13 @@
             return arguments.callee.call(this);
         }
     }
+    // 区块循环迭代
     fn.map = function(fn) {
         for (var i = 0; i < this.areas.length; i++) {
             fn.call(this, this.areas[i], i);
         }
     }
-    fn.isAreaEmpty = function(i) {
-        return !this.getArea(i).elm;
-    }
+    // 新建一个有值磁块
     fn.newItem = function(debug) {
         var val = 2,
             i = debug || this.randomIndex(),
@@ -295,6 +322,7 @@
 
         return area.elm;
     }
+    // 渲染磁块值
     fn.renderVal = function(i) {
         var area = this.getArea(i);
 
@@ -308,15 +336,18 @@
             area.val = 0;
         }
     }
+    // 渲染总分
     fn.renderScore = function() {
         _setText(this.doms.score, this.score);
     }
+    // 检查是否结束
     fn.checkComplete = function() {
         if (this.complete) {
             window.alert('结束了，重新开始吧');
             this.reset();
         }
     }
+    // 是否还有空白区块
     fn.hasEmptyArea = function() {
         var empty = false;
         this.map(function(area, i) {
@@ -326,9 +357,11 @@
         });
         return empty;
     }
+    // 是否还可移动
     fn.canMove = function() {
         return this.horizontalCanMove() || this.verticalCanMove();
     }
+    // 水平可移动
     fn.horizontalCanMove = function() {
         var equal = false;
         for (var i = 0; i < this.matrix.length; i++) {
@@ -342,6 +375,7 @@
         }
         return equal;
     }
+    // 垂直可移动
     fn.verticalCanMove = function() {
         var equal = false;
         for (var i = 0; i < this.matrix.length; i++) {
@@ -359,9 +393,40 @@
         }
         return equal;
     }
+    // 绑定事件
     fn.bindEvent = function() {
         _Drag(this.doms.main, this.DragEvent, this);
+        console.log(2);
+        _addEvent(document, 'keydown', this.keydownEvent, this);
     }
+    fn.unBindEvent = function() {
+        _Drag(this.doms.main);
+        _removeEvent(document, 'keydown', this.keydownEvent);
+    }
+    fn.keydownEvent = function(evt) {
+        var code = evt.keyCode || evt.charCode || evt.which;
+        try {
+            evt.returnVale = false;
+        } catch(e) {
+            evt.preventDefault();
+        }
+        switch(code) {
+            case 37:
+                this.dir = 'l';
+            break;
+            case 38:
+                this.dir = 't';
+            break;
+            case 39:
+                this.dir = 'r';
+            break;
+            case 40:
+                this.dir = 'b';
+            break;
+        }
+        this.move();
+    }
+    // 拖拽处理事件
     fn.DragEvent = function(data, evt) {
         switch(data.type) {
             case 'endDrag':
@@ -379,12 +444,13 @@
         }
         return true;
     }
+    // 移动
     fn.move = function() {
         if (this.moving) {
             return false;
         }
-        this.moving = true;
-        this.moveCount = 0;
+        this.moving = true;  // 上锁，防止连续触发
+        this.moveCount = 0;  // 移动计数器
         switch(this.dir) {
             case 'l':
                 this.moveLeft();
@@ -402,20 +468,21 @@
 
         this.moveEnd();
     }
+    // 移动结束
     fn.moveEnd = function() {
         this.renderScore();
-        if (this.hasEmptyArea()) {
+        if (this.hasEmptyArea()) { // 如果有空区块，并且当前方向移动成功，则创建新磁块，否则为游戏结束
             if (this.moveCount) {
                 this.newItem();
             }
-            this.complete = !this.canMove();
+            this.complete = !this.canMove(); // 不可移动，游戏也结束
         } else {
             this.complete = true;
         }
         this.checkComplete();
-        this.moving = false;
+        this.moving = false;  // 解锁
         this.dir = null;
-        this.moveCount = 0;
+        this.moveCount = 0;   // 清空移动计数
     }
     fn.moveLeft = function() {
         var index,
@@ -581,33 +648,34 @@
             }
         }
     }
+    // 单个磁块移动处理
     fn.singleMove = function(fromIndex, toIndex) {
         var fromArea = this.getArea(fromIndex),
             toArea = this.getArea(toIndex);
 
-        if (fromIndex === toIndex) {return;}
+        if (fromIndex === toIndex) {return;} //不能原位置移动
 
-        if (fromArea.elm) {
-            toArea.val = toArea.val + fromArea.val;
-            if (toArea.elm) {
+        if (fromArea.elm) { // 不能无元素移动
+            toArea.val = toArea.val + fromArea.val; // 移向的val
+            if (toArea.elm) {  // 如果移动到的地方有磁块则移除，并视为碰撞成功
                 this.doms.main.removeChild(toArea.elm);
                 this.score += toArea.val;
             }
-            toArea.elm = fromArea.elm;
+            toArea.elm = fromArea.elm; // 给元素换主人
             _setStyle(toArea.elm, {
                 left: toArea.left + 'px',
                 top: toArea.top + 'px'
             });
             fromArea.elm = null;
             fromArea.val = 0;
-            this.renderVal(toIndex);
+            this.renderVal(toIndex);  // 渲染值
             this.moveCount++;
         }
     }
+    // 开始
     fn.start = function() {
-        this.newItem(1);
-        this.newItem(2);
-        this.newItem(3);
+        this.newItem();
+        this.newItem();
         this.renderScore();
     }
 
