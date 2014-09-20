@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+    * {margin: 0; padding: 0;}
+    ul, li {list-style: none;}
+    #wrap {
+        width: 600px;
+        margin: 50px auto;
+    }
+</style>
+<script src="2048.js"></script>
+<script>
+window.onload = function() {
+    var a = h2048(document.getElementById("wrap"));
+    a.reset();
+}
+</script>
+</head>
+<body>
+    <div id="wrap"></div>
+</body>
+</html>
