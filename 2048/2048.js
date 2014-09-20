@@ -737,7 +737,7 @@
         this.renderScore();
     }
 
-    window.h2048 = function(container) {
+    window["h2048"] = function(container) {
         return new C2048(container);
     }
 })(window);
