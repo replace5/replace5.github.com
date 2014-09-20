@@ -491,7 +491,9 @@
                 } else {
                     this.dir = data.dy > 0 ? 'b' : 't';
                 }
-                this.move();
+                if (Math.abs(data.dx) > 30 || Math.abs(data.dy) > 30) {
+                    this.move();
+                }
                 document.body.style.cursor = 'default';
             break;
             case 'moveDrag':
