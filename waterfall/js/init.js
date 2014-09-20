@@ -8,7 +8,7 @@ factory(function() {
             container: container
         });
         window.onscroll = function() {
-            var clientHeight = document[document.compatMode = 'CSS1Compat' ? "documentElement" : "body"].clientHeight,
+            var clientHeight = document[document.compatMode === 'CSS1Compat' ? "documentElement" : "body"].clientHeight,
                 scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop),
                 scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
             if (scrollHeight - clientHeight - scrollTop < 100) {
