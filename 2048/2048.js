@@ -432,8 +432,7 @@
         if (this.complete) {
             window.alert('结束了，重新开始吧');
             // this.reset();
-            window.abc = this;
-            console.log(this);
+            window.debug2048 = this;
         }
     }
     // 是否还有空白区块
@@ -450,20 +449,34 @@
     fn.canMove = function() {
         return this.horizontalCanMove() || this.verticalCanMove();
     }
-    // 水平可移动
-    fn.horizontalCanMove = function() {
+    fn.sortEqual = function(arr) {
         var equal = false,
             that = this;
+        hLayer.sort(function(a, b) {
+            var area_a = that.getArea(a),
+                area_b = that.getArea(b);
+            if (area_a.val === area_b.val && area_a.val < 2048 && area_b.val < 2048 || area_a.val === 0 || area_b.val === 0) {
+               equal = true;
+            }
+            return area_a.index - area_b.index;
+        });
+        return equal;
+    }
+    // 水平可移动
+    fn.horizontalCanMove = function() {
+        var equal = false;
+
         for (var i = 0; i < this.matrix.length; i++) {
-            var layer = this.matrix[i];
-            layer.sort(function(a, b) {
-                var area_a = that.getArea(a),
-                    area_b = that.getArea(b);
-                if (area_a.val === area_b.val && area_b.val < 2048 || area_a.val === 0) {
-                   equal = true;
-                }
-                return area_a.index - area_b.index;
-            });
+            var layer = this.matrix[i],
+                hLayer = [];
+            for (var j = 0; j < layer.length; j++) {
+                hLayer.push(i * layer.length + j);
+            }
+            if (this.sortEqual(hLayer)) {
+                equal = true;
+                break;
+            }
+
         }
         return equal;
     }
@@ -475,16 +488,12 @@
             var layer = this.matrix[i],
                 vLayer = [];
             for (var j = 0; j < layer.length; j++) {
-                vLayer.push(i * layer.length + j);
+                vLayer.push(j * layer.length + i);
             }
-            vLayer.sort(function(a, b) {
-                var area_a = that.getArea(a),
-                    area_b = that.getArea(b);
-                if (area_a.val === area_b.val && area_b.val < 2048 || area_a.val === 0) {
-                   equal = true;
-                }
-                return area_a.index - area_b.index;
-            });
+            if (this.sortEqual(vLayer)) {
+                equal = true;
+                break;
+            }
         }
         return equal;
     }
