@@ -114,7 +114,6 @@
                 data.cb.call(data.ct, data, evt);
             break;
             case 'mousedown':
-                console.log(2);
                 data.type = 'startDrag';
                 data.offsetX = data.x;
                 data.offsetY = data.y;
@@ -276,9 +275,9 @@
     fn.isAreaEmpty = function(i) {
         return !this.getArea(i).elm;
     }
-    fn.newItem = function() {
+    fn.newItem = function(debug) {
         var val = 2,
-            i = this.randomIndex(),
+            i = debug || this.randomIndex(),
             area = this.getArea(i),
             elm = this.buildSquare(i);
 
@@ -400,20 +399,23 @@
                 this.moveBottom();
             break;
         }
+
         this.moveEnd();
     }
     fn.moveEnd = function() {
-        this.moving = false;
-        this.dir = null;
-        this.moveCount = 0;
         this.renderScore();
         if (this.hasEmptyArea()) {
-            this.newItem();
+            if (this.moveCount) {
+                this.newItem();
+            }
             this.complete = !this.canMove();
         } else {
             this.complete = true;
         }
         this.checkComplete();
+        this.moving = false;
+        this.dir = null;
+        this.moveCount = 0;
     }
     fn.moveLeft = function() {
         var index,
@@ -422,6 +424,7 @@
             prev,
             origin,
             current,
+            used,
             area,
             layer;
 
@@ -430,6 +433,7 @@
             prev = -1;
             origin = -1;
             move = 0;
+            used = false;
             bottom = this.matrix.length * i;
             for (var j = 0; j < layer.length; j++) {
                 index = bottom + j;
@@ -437,15 +441,20 @@
                 current = area.val;
                 if (origin === current) {
                     move++;
+                    used = true;
                 }
                 if(prev === 0) {
                     move++;
                 }
-                this.singleMove(index, Math.max(bottom , index - move));
                 if (current) {
                     origin = current;
                 }
+                if (used) {
+                    origin = -1;
+                    user = false;
+                }
                 prev = current;
+                this.singleMove(index, Math.max(bottom , index - move));
             }
         }
     }
@@ -456,30 +465,37 @@
             prev,
             origin,
             current,
+            used,
             area,
             layer;
 
         for (var i = 0; i < this.matrix.length; i++) {
             layer = this.matrix[i];
-            prev = -1;
-            origin = -1;
-            move = 0;
-            bottom = layer.length * (i + 1) - 1;
+            prev = -1;    // 上一个值
+            origin = -1;  // 前一个不为0的值
+            move = 0;     // 可移动距离
+            used = false; // 上一个相等值是否使用过，防止连续三个相等
+            bottom = layer.length * (i + 1) - 1; // 碰撞边缘
             for (var j = 0; j < layer.length; j++){
-                index = bottom - j;
+                index = bottom - j;             // 当前index
                 area = this.getArea(index);
-                current = area.val;
-                if (origin === current) {
+                current = area.val;            // 当前val
+                if (origin === current) {      //如果连续两个值相等则
+                    move++;
+                    used = true;
+                }
+                if(prev === 0) {               // 上一个为空，直接移动
                     move++;
                 }
-                if(prev === 0) {
-                    move++;
-                }
-                this.singleMove(index, Math.min(bottom , index + move));
-                if (current) {
+                if (current) {                 // 当前值不为0则缓存
                     origin = current;
                 }
-                prev = current;
+                prev = current;                // 缓存当前值为前一个值
+                if (used) {                    // 如果已使用，则设置为无效，并重置used
+                    origin = -1;
+                    user = false;
+                }
+                this.singleMove(index, Math.min(bottom , index + move));
             }
         }
     }
@@ -490,6 +506,7 @@
             prev,
             origin,
             current,
+            used,
             area,
             layer;
 
@@ -498,6 +515,7 @@
             prev = -1;
             origin = -1;
             move = 0;
+            used = false;
             bottom = i;
             for (var j = 0; j < layer.length; j++) {
                 index = j * this.matrix.length + bottom;
@@ -505,15 +523,20 @@
                 current = area.val;
                 if (origin === current) {
                     move += this.matrix.length;
+                    used = true;
                 }
                 if(prev === 0) {
                     move += this.matrix.length;
                 }
-                this.singleMove(index, Math.max(bottom , index - move));
                 if (current) {
                     origin = current;
                 }
                 prev = current;
+                if (used) {
+                    origin = -1;
+                    user = false;
+                }
+                this.singleMove(index, Math.max(bottom , index - move));
             }
         }
     }
@@ -524,6 +547,7 @@
             prev,
             origin,
             current,
+            used,
             area,
             layer;
 
@@ -532,6 +556,7 @@
             prev = -1;
             origin = -1;
             move = 0;
+            used = false;
             bottom = (this.matrix.length - 1) * layer.length + i;
             for (var j = 0; j < layer.length; j++) {
                 index = bottom - j * this.matrix.length;
@@ -539,15 +564,20 @@
                 current = area.val;
                 if (origin === current) {
                     move += this.matrix.length;
+                    used = true;
                 }
                 if(prev === 0) {
                     move += this.matrix.length;
                 }
-                this.singleMove(index, Math.min(bottom , index + move));
                 if (current) {
                     origin = current;
                 }
                 prev = current;
+                if (used) {
+                    origin = -1;
+                    user = false;
+                }
+                this.singleMove(index, Math.min(bottom , index + move));
             }
         }
     }
@@ -575,8 +605,9 @@
         }
     }
     fn.start = function() {
-        this.newItem();
-        this.newItem();
+        this.newItem(1);
+        this.newItem(2);
+        this.newItem(3);
         this.renderScore();
     }
 
