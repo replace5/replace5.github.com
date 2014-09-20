@@ -1,4 +1,7 @@
 (function(window, undefined) {
+    function _ucfirst(str) {
+        return  str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
     function _setStyle(elm, name, value) {
         var capName, prefixes, i ,style;
@@ -12,7 +15,7 @@
             return elm;
         }
 
-        capName = name.charAt(0).toUpperCase() + name.slice(1);
+        capName = _ucfirst(name);
         prefixes = [ "Webkit", "O", "Moz", "ms" ];
         i = prefixes.length;
         style = elm.style;
@@ -83,7 +86,7 @@
         }
     }
 
-    var SUPPORT_TOUCH  = ('ontouchstart' in document.documentElement);
+    var SUPPORT_TOUCH  = ("ontouchstart" in window) || window.DocumentTouch && document instanceof DocumentTouch;
     function _Drag(elm, callback, context, data) {
         if (arguments.length === 1) {
             _removeEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent);
@@ -188,26 +191,7 @@
     fn.build = function() {
         this.buildMain();
         this.buildScore();
-    }
-    // 构建分数界面
-    fn.buildScore = function() {
-        var score = document.createElement('div');
-        _setStyle(score, {
-            width: '150px',
-            height: '60px',
-            lineHeight: '60px',
-            fontWeight: 'bold',
-            borderRadius: '7px',
-            background: '#272727',
-            color: '#fff',
-            textAlign: 'center',
-            fontSize: '24px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: '20px'
-        });
-        this.doms.score = score;
-        this.container.appendChild(score);
+        this.buildControl();
     }
     // 构建游戏主界面
     fn.buildMain = function() {
@@ -267,6 +251,79 @@
 
         this.doms.main.appendChild(elm);
         return elm;
+    }
+    // 构建分数界面
+    fn.buildScore = function() {
+        var score = document.createElement('div');
+        _setStyle(score, {
+            width: '150px',
+            height: '60px',
+            lineHeight: '60px',
+            fontWeight: 'bold',
+            borderRadius: '7px',
+            background: '#272727',
+            color: '#fff',
+            textAlign: 'center',
+            fontSize: '24px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: '20px'
+        });
+        this.doms.score = score;
+        this.container.appendChild(score);
+    }
+    fn.buildControl = function() {
+        var doms = this.doms;
+        doms.control = document.createElement('div');
+        this.container.appendChild(doms.control);
+        _setStyle(doms.control, {
+            position: 'absolute',
+            right: '100px',
+            bottom: '100px',
+            width: '40px',
+            height: '40px'
+        });
+        var pos = ['top', 'right', 'bottom', 'left'];
+        for (var i = 0; i < pos.length; i++) {
+            this.buildCtrl(pos[i]);
+        }
+    }
+    fn.buildCtrl = function(pos) {
+        var doms = this.doms,
+            ctrl = document.createElement('div');
+        _setStyle(ctrl, {
+            'width': '0',
+            'height': '0',
+            'position': 'absolute',
+            'borderStyle': 'solid',
+            'borderColor': 'transparent',
+            'borderWidth': '20px'
+        });
+
+        var p = {
+            'left': 'right',
+            'top': 'bottom'
+        }
+        var another;
+        for (var i in p) {
+            if (p.hasOwnProperty(i)) {
+                if (i == pos) {
+                    another = p[i];
+                } else if (p[i] == pos) {
+                    another = i;
+                }
+            }
+        }
+        _setStyle(ctrl, another, '100%');
+        _setStyle(ctrl, 'border' + _ucfirst(another) + 'Color', '#333');
+        _setStyle(ctrl, 'border' + _ucfirst(another) + 'Width', '40px');
+        _setStyle(ctrl, 'border' + _ucfirst(pos) + 'Width', '0');
+        doms['ctrl'+pos] = ctrl;
+        doms.control.appendChild(ctrl);
+        _addEvent(ctrl, 'click', function() {
+            this.dir = pos.charAt(0);
+            this.move();
+        }, this);
     }
     // 获取单个区块数据
     fn.getArea = function(i) {
@@ -396,7 +453,6 @@
     // 绑定事件
     fn.bindEvent = function() {
         _Drag(this.doms.main, this.DragEvent, this);
-        console.log(2);
         _addEvent(document, 'keydown', this.keydownEvent, this);
     }
     fn.unBindEvent = function() {
