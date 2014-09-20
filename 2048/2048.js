@@ -280,8 +280,8 @@
             position: 'absolute',
             right: '100px',
             bottom: '100px',
-            width: '48px',
-            height: '48px'
+            width: '40px',
+            height: '40px'
         });
         var pos = ['top', 'right', 'bottom', 'left'];
         for (var i = 0; i < pos.length; i++) {
@@ -297,7 +297,7 @@
             'position': 'absolute',
             'borderStyle': 'solid',
             'borderColor': 'transparent',
-            'borderWidth': '24px'
+            'borderWidth': '20px'
         });
 
         var p = {
@@ -316,7 +316,7 @@
         }
         _setStyle(ctrl, another, '100%');
         _setStyle(ctrl, 'border' + _ucfirst(another) + 'Color', '#333');
-        _setStyle(ctrl, 'border' + _ucfirst(another) + 'Width', '48px');
+        _setStyle(ctrl, 'border' + _ucfirst(another) + 'Width', '40px');
         _setStyle(ctrl, 'border' + _ucfirst(pos) + 'Width', '0');
         doms['ctrl'+pos] = ctrl;
         doms.control.appendChild(ctrl);
