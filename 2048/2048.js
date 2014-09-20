@@ -240,12 +240,14 @@
             position: 'absolute',
             width: this.areaSize + 'px',
             height: this.areaSize + 'px',
+            opacity: isBg ? 1 : 0,
             lineHeight: this.areaSize + 'px',
             textAlign: 'center',
             borderRadius: '7px',
             left: area.left + 'px',
             top: area.top + 'px',
             zIndex: !isBg + 2,
+            transition: 'all 0.2s ease-in,opacity 0.4s linear',
             backgroundColor: isBg ? '#fff5f5' : '#f57'
         });
 
@@ -361,13 +363,20 @@
     // 新建一个有值磁块
     fn.newItem = function(debug) {
         var val = 2,
+            that = this,
             i = debug || this.randomIndex(),
             area = this.getArea(i),
             elm = this.buildSquare(i);
 
-            if (Math.random() * 10 > 6.5) {
-                val = 4;
-            }
+
+        if (Math.random() * 10 > 6.5) {
+            val = 4;
+        }
+
+        setTimeout(function() {
+            _setStyle(elm, 'opacity', 1);
+            that = null;
+        }, 20);
 
         _setStyle(elm, {
             fontSize: '20px',
@@ -716,7 +725,11 @@
         if (fromArea.elm) { // 不能无元素移动
             toArea.val = toArea.val + fromArea.val; // 移向的val
             if (toArea.elm) {  // 如果移动到的地方有磁块则移除，并视为碰撞成功
-                this.doms.main.removeChild(toArea.elm);
+                var elm = toArea.elm;
+                setTimeout(function() {
+                    elm.parentNode.removeChild(elm);
+                    elm = null;
+                }, 200);
                 this.score += toArea.val;
             }
             toArea.elm = fromArea.elm; // 给元素换主人
