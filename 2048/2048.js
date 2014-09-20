@@ -431,7 +431,7 @@
     fn.checkComplete = function() {
         if (this.complete) {
             window.alert('结束了，重新开始吧');
-            // this.reset();
+            this.reset();
             window.debug2048 = this;
         }
     }
@@ -464,7 +464,7 @@
     }
     // 水平可移动
     fn.horizontalCanMove = function() {
-        var equal = false;
+        var canMove = false;
 
         for (var i = 0; i < this.matrix.length; i++) {
             var layer = this.matrix[i],
@@ -473,17 +473,16 @@
                 hLayer.push(i * layer.length + j);
             }
             if (this.sortEqual(hLayer)) {
-                equal = true;
+                canMove = true;
                 break;
             }
-
         }
-        return equal;
+        return canMove;
     }
     // 垂直可移动
     fn.verticalCanMove = function() {
-        var equal = false,
-            that = this;
+        var canMove = false;
+
         for (var i = 0; i < this.matrix.length; i++) {
             var layer = this.matrix[i],
                 vLayer = [];
@@ -491,11 +490,11 @@
                 vLayer.push(j * layer.length + i);
             }
             if (this.sortEqual(vLayer)) {
-                equal = true;
+                canMove = true;
                 break;
             }
         }
-        return equal;
+        return canMove;
     }
     // 绑定事件
     fn.bindEvent = function() {
