@@ -155,6 +155,7 @@
     var fn = C2048.prototype;
     fn.init = function() {
         this.buildMatrix();
+        this.buidColor();
         this.build();
         this.bindEvent();
         this.start();
@@ -169,6 +170,25 @@
         this.doms = {};
         this.score = 0;
         this.init();
+    }
+    fn.buidColor = function() {
+        var colors = [
+            '#f57',
+            '#a67',
+            '#7ba3e4',
+            '#9d7c1f',
+            '#693465',
+            '#2c9d1f',
+            '#1f4f9d',
+            '#ae22a2',
+            '#e4e14d',
+            '#32dee0',
+            '#c31c25'
+        ];
+        this.colors = {};
+        for (var i = 0; i < colors.length; i++) {
+            this.colors[2 << i] = colors[i];
+        }
     }
     // 构建矩阵数组
     fn.buildMatrix = function() {
@@ -248,7 +268,7 @@
             top: area.top + 'px',
             zIndex: !isBg + 2,
             transition: 'all 0.2s ease-in,opacity 0.4s linear',
-            backgroundColor: isBg ? '#fff5f5' : '#f57'
+            backgroundColor: '#fff5f5'
         });
 
         this.doms.main.appendChild(elm);
@@ -335,7 +355,7 @@
     fn.getEmptyArea = function() {
         var result = [];
         this.map(function(area) {
-            if (!area.elm) {
+            if (area.val === 0) {
                 result.push(area);
             }
         });
@@ -343,7 +363,7 @@
     }
     // 区块是否为空
     fn.isAreaEmpty = function(i) {
-        return !this.getArea(i).elm;
+        return this.getArea(i).val === 0;
     }
     // 在剩余空区块中随机
     fn.randomIndex = function() {
@@ -395,6 +415,7 @@
         if (area.elm) {
             if (area.val) {
                 _setText(area.elm, area.val);
+                _setStyle(area.elm, 'background', this.colors[area.val] || '#f47');
             } else {
                 this.doms.main.removeChild(area.elm);
             }
@@ -410,14 +431,16 @@
     fn.checkComplete = function() {
         if (this.complete) {
             window.alert('结束了，重新开始吧');
-            this.reset();
+            // this.reset();
+            window.abc = this;
+            console.log(this);
         }
     }
     // 是否还有空白区块
     fn.hasEmptyArea = function() {
         var empty = false;
         this.map(function(area, i) {
-            if (!area.elm) {
+            if (area.val === 0) {
                 empty = true;
             }
         });
@@ -429,21 +452,25 @@
     }
     // 水平可移动
     fn.horizontalCanMove = function() {
-        var equal = false;
+        var equal = false,
+            that = this;
         for (var i = 0; i < this.matrix.length; i++) {
             var layer = this.matrix[i];
             layer.sort(function(a, b) {
-                if (a.val === b.val) {
+                var area_a = that.getArea(a),
+                    area_b = that.getArea(b);
+                if (area_a.val === area_b.val && area_b.val < 2048 || area_a.val === 0) {
                    equal = true;
                 }
-                return a.index - b.index;
+                return area_a.index - area_b.index;
             });
         }
         return equal;
     }
     // 垂直可移动
     fn.verticalCanMove = function() {
-        var equal = false;
+        var equal = false,
+            that = this;
         for (var i = 0; i < this.matrix.length; i++) {
             var layer = this.matrix[i],
                 vLayer = [];
@@ -451,10 +478,12 @@
                 vLayer.push(i * layer.length + j);
             }
             vLayer.sort(function(a, b) {
-                if (a.val === b.val) {
+                var area_a = that.getArea(a),
+                    area_b = that.getArea(b);
+                if (area_a.val === area_b.val && area_b.val < 2048 || area_a.val === 0) {
                    equal = true;
                 }
-                return a.index - b.index;
+                return area_a.index - area_b.index;
             });
         }
         return equal;
@@ -541,8 +570,8 @@
         if (this.hasEmptyArea()) { // 如果有空区块，并且当前方向移动成功，则创建新磁块，否则为游戏结束
             if (this.moveCount) {
                 this.newItem();
+                this.complete = !this.canMove(); // 不可移动，游戏也结束
             }
-            this.complete = !this.canMove(); // 不可移动，游戏也结束
         } else {
             this.complete = true;
         }
@@ -573,7 +602,7 @@
                 index = bottom + j;
                 area = this.getArea(index);
                 current = area.val;
-                if (origin === current) {
+                if (origin === current && current < 2048) {
                     move++;
                     used = true;
                 }
@@ -614,7 +643,7 @@
                 index = bottom - j;             // 当前index
                 area = this.getArea(index);
                 current = area.val;            // 当前val
-                if (origin === current) {      //如果连续两个值相等则
+                if (origin === current && current < 2048) {      //如果连续两个值相等则
                     move++;
                     used = true;
                 }
@@ -655,7 +684,7 @@
                 index = j * this.matrix.length + bottom;
                 area = this.getArea(index);
                 current = area.val;
-                if (origin === current) {
+                if (origin === current && current < 2048) {
                     move += this.matrix.length;
                     used = true;
                 }
@@ -696,7 +725,7 @@
                 index = bottom - j * this.matrix.length;
                 area = this.getArea(index);
                 current = area.val;
-                if (origin === current) {
+                if (origin === current && current < 2048) {
                     move += this.matrix.length;
                     used = true;
                 }
