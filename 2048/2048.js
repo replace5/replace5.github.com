@@ -92,7 +92,6 @@
             _removeEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent);
         }
         
-        alert(SUPPORT_TOUCH);
         _addEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent, null, {
             cb: callback,
             ct: context,
@@ -127,12 +126,12 @@
             break;
             case 'touchmove':
             case 'mousemove':
-                alert(data.x);
                 data.type = 'moveDrag';
                 data.dx = data.x - data.offsetX;
                 data.dy = data.y - data.offsetY;
                 data.cb.call(data.ct, data, evt);
             break;
+            case 'touchstart':
             case 'mousedown':
                 data.type = 'startDrag';
                 data.offsetX = data.x;
