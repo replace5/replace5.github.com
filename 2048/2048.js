@@ -104,13 +104,15 @@
         var data = evt.data,
             scroll = _getScroll();
 
-        data.x = SUPPORT_TOUCH ? evt.touches[0].pageX : evt.pageX || evt.clientX + scroll.left;
-        data.y = SUPPORT_TOUCH ? evt.touches[0].pageY : evt.pageY || evt.clientY + scroll.top;
+        data.x = SUPPORT_TOUCH && evt.touches && evt.touches.length ? evt.touches[0].pageX : evt.pageX || evt.clientX + scroll.left;
+        data.y = SUPPORT_TOUCH && evt.touches && evt.touches.length ? evt.touches[0].pageY : evt.pageY || evt.clientY + scroll.top;
 
         try {
+            evt.returnVale = false;
             evt.cancleBubble();
         } catch(e) {
             evt.stopPropagation();
+            evt.preventDefault();
         }
 
         switch(evt.type) {
@@ -128,11 +130,6 @@
                 data.dx = data.x - data.offsetX;
                 data.dy = data.y - data.offsetY;
                 data.cb.call(data.ct, data, evt);
-                try {
-                    evt.returnVale = false;
-                } catch(e) {
-                    evt.preventDefault();
-                }
             break;
             case 'touchstart':
             case 'mousedown':
