@@ -791,8 +791,6 @@
     fn.start = function() {
         this.newItem();
         this.newItem();
-        this.newItem();
-        this.newItem();
         this.renderScore();
     }
 
