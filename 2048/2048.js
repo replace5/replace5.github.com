@@ -108,10 +108,8 @@
         data.y = SUPPORT_TOUCH ? evt.touches[0].pageY : evt.pageY || evt.clientY + scroll.top;
 
         try {
-            evt.returnVale = false;
             evt.cancleBubble();
         } catch(e) {
-            evt.preventDefault();
             evt.stopPropagation();
         }
 
@@ -130,6 +128,11 @@
                 data.dx = data.x - data.offsetX;
                 data.dy = data.y - data.offsetY;
                 data.cb.call(data.ct, data, evt);
+                try {
+                    evt.returnVale = false;
+                } catch(e) {
+                    evt.preventDefault();
+                }
             break;
             case 'touchstart':
             case 'mousedown':
