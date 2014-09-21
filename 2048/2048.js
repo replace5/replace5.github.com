@@ -91,7 +91,7 @@
         if (arguments.length === 1) {
             _removeEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent);
         }
-        
+
         _addEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent, null, {
             cb: callback,
             ct: context,
@@ -385,16 +385,19 @@
         }
     }
     // 新建一个有值磁块
-    fn.newItem = function(debug) {
+    fn.newItem = function(debug, debugValue) {
         var val = 2,
             that = this,
-            i = debug || this.randomIndex(),
+            i = debug > -1 ? debug : this.randomIndex(),
             area = this.getArea(i),
             elm = this.buildSquare(i);
 
 
         if (Math.random() * 10 > 6.5) {
             val = 4;
+        }
+        if (debugValue > -1) {
+            val = debugValue;
         }
 
         setTimeout(function() {
@@ -626,7 +629,7 @@
                 }
                 if (used) {
                     origin = -1;
-                    user = false;
+                    used = false;
                 }
                 prev = current;
                 this.singleMove(index, Math.max(bottom , index - move));
@@ -668,7 +671,7 @@
                 prev = current;                // 缓存当前值为前一个值
                 if (used) {                    // 如果已使用，则设置为无效，并重置used
                     origin = -1;
-                    user = false;
+                    used = false;
                 }
                 this.singleMove(index, Math.min(bottom , index + move));
             }
@@ -709,7 +712,7 @@
                 prev = current;
                 if (used) {
                     origin = -1;
-                    user = false;
+                    used = false;
                 }
                 this.singleMove(index, Math.max(bottom , index - move));
             }
@@ -750,7 +753,7 @@
                 prev = current;
                 if (used) {
                     origin = -1;
-                    user = false;
+                    used = false;
                 }
                 this.singleMove(index, Math.min(bottom , index + move));
             }
@@ -786,6 +789,8 @@
     }
     // 开始
     fn.start = function() {
+        this.newItem();
+        this.newItem();
         this.newItem();
         this.newItem();
         this.renderScore();
