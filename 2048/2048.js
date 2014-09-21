@@ -91,6 +91,8 @@
         if (arguments.length === 1) {
             _removeEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent);
         }
+        
+        alert(SUPPORT_TOUCH);
         _addEvent(elm, SUPPORT_TOUCH ? 'touchstart' : 'mousedown', _DragEvent, null, {
             cb: callback,
             ct: context,
@@ -105,8 +107,6 @@
 
         data.x = SUPPORT_TOUCH ? evt.touches[0].pageX : evt.pageX || evt.clientX + scroll.left;
         data.y = SUPPORT_TOUCH ? evt.touches[0].pageY : evt.pageY || evt.clientY + scroll.top;
-        
-        alert(data.x);
 
         try {
             evt.returnVale = false;
