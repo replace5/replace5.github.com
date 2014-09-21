@@ -105,6 +105,8 @@
 
         data.x = SUPPORT_TOUCH ? evt.touches[0].pageX : evt.pageX || evt.clientX + scroll.left;
         data.y = SUPPORT_TOUCH ? evt.touches[0].pageY : evt.pageY || evt.clientY + scroll.top;
+        
+        alert(data.x);
 
         try {
             evt.returnVale = false;
