@@ -103,13 +103,15 @@
         var data = evt.data,
             scroll = _getScroll();
 
-        data.x = evt.pageX || evt.clientX + scroll.left;
-        data.y = evt.pageY || evt.clientY + scroll.top;
+        data.x = SUPPORT_TOUCH ? evt.touches[0].pageX : evt.pageX || evt.clientX + scroll.left;
+        data.y = SUPPORT_TOUCH ? evt.touches[0].pageY : evt.pageY || evt.clientY + scroll.top;
 
         try {
             evt.returnVale = false;
+            evt.cancleBubble();
         } catch(e) {
             evt.preventDefault();
+            evt.stopPropagation();
         }
 
         switch(evt.type) {
