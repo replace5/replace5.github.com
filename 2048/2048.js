@@ -123,6 +123,7 @@
             break;
             case 'touchmove':
             case 'mousemove':
+                alert(data.x);
                 data.type = 'moveDrag';
                 data.dx = data.x - data.offsetX;
                 data.dy = data.y - data.offsetY;
@@ -449,10 +450,10 @@
     fn.canMove = function() {
         return this.horizontalCanMove() || this.verticalCanMove();
     }
-    fn.sortEqual = function(arr) {
+    fn.sortEqual = function(layer) {
         var equal = false,
             that = this;
-        hLayer.sort(function(a, b) {
+        layer.sort(function(a, b) {
             var area_a = that.getArea(a),
                 area_b = that.getArea(b);
             if (area_a.val === area_b.val && area_a.val < 2048 && area_b.val < 2048 || area_a.val === 0 || area_b.val === 0) {
