@@ -146,10 +146,11 @@
         }
     }
 
-    function C2048(container) {
-        this.container = container;
+    function C2048(target) {
+        this.target = target;
         this.areaSize = 100;   // 每个方块的尺寸
         this.padding = 10;     // 方块间距
+        this.mainMargin = 20;  // 控制栏和主区域的间距
         this.areas = [];       // 方块区域缓存
         this.doms = {};        // dom缓存
         this.score = 0;        // 分数缓存
@@ -168,8 +169,7 @@
     fn.reset = function() {
         var doms = this.doms;
         this.unBindEvent();
-        doms.main.parentNode.removeChild(doms.main);
-        doms.score.parentNode.removeChild(doms.score);
+        doms.container.parentNode.removeChild(doms.container);
         this.areas = [];
         this.doms = {};
         this.score = 0;
@@ -213,28 +213,38 @@
     }
     // 构建界面
     fn.build = function() {
+        this.buildContainer();
         this.buildMain();
-        this.buildScore();
-        this.buildControl();
+        this.buildSide();
+    }
+    fn.buildContainer = function() {
+        var container = document.createElement('div');
+        container.style.position = 'relative';
+        this.target.appendChild(container);
+        this.doms.container = container;
     }
     // 构建游戏主界面
     fn.buildMain = function() {
         var main = document.createElement('div');
 
         main.style.position = 'relative';
-        this.container.appendChild(main);
+        this.doms.container.appendChild(main);
         this.doms.main = main;
 
         this.buildAllAreas();
-        this.setMainSize();
+        this.setSize();
     }
     // 设置主界面尺寸
-    fn.setMainSize = function() {
-         _setStyle(this.doms.main, {
+    fn.setSize = function() {
+         _setStyle(this.doms.container, {
+            width: this.areaSize * 4 + this.padding * 3 + 'px'
+        });
+
+        _setStyle(this.doms.main, {
             userSelect: 'none',
             width: this.areaSize * 4 + this.padding * 3 + 'px',
             height: this.areaSize * 4 + this.padding * 3 + 'px'
-        })
+        });
     }
     // 构建所有游戏区块
     fn.buildAllAreas = function() {
@@ -278,10 +288,19 @@
         this.doms.main.appendChild(elm);
         return elm;
     }
+    fn.buildSide = function() {
+        this.buildScore();
+        this.buildRefreshBtn();
+        this.buildControl();
+    }
     // 构建分数界面
     fn.buildScore = function() {
         var score = document.createElement('div');
         _setStyle(score, {
+            position: 'absolute',
+            left: '100%',
+            top: '0',
+            marginLeft: this.mainMargin + 'px',
             width: '150px',
             height: '60px',
             lineHeight: '60px',
@@ -291,23 +310,45 @@
             color: '#fff',
             textAlign: 'center',
             fontSize: '24px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: '20px'
         });
         this.doms.score = score;
-        this.container.appendChild(score);
+        this.doms.container.appendChild(score);
+    }
+    fn.buildRefreshBtn = function() {
+        var refreshBtn = document.createElement('div');
+        _setStyle(refreshBtn, {
+            position: 'absolute',
+            left: '100%',
+            top: '90px',
+            marginLeft: this.mainMargin + 'px',
+            width: '150px',
+            height: '60px',
+            lineHeight: '60px',
+            fontWeight: 'bold',
+            borderRadius: '7px',
+            background: '#6aace0',
+            color: '#fff',
+            textAlign: 'center',
+            fontSize: '20px',
+        });
+        _setText(refreshBtn, '刷新');
+
+        _addEvent(refreshBtn, 'click', this.reset, this);
+        this.doms.refreshBtn = refreshBtn;
+        this.doms.container.appendChild(refreshBtn);
     }
     fn.buildControl = function() {
         var doms = this.doms;
+        this.ctrlSize = 50;
         doms.control = document.createElement('div');
-        this.container.appendChild(doms.control);
+        doms.container.appendChild(doms.control);
         _setStyle(doms.control, {
             position: 'absolute',
-            right: '100px',
-            bottom: '100px',
-            width: '40px',
-            height: '40px'
+            left: '100%',
+            marginLeft: this.ctrlSize + this.mainMargin + 'px',
+            bottom: this.ctrlSize + this.mainMargin + 'px',
+            width: this.ctrlSize + 'px',
+            height: this.ctrlSize + 'px'
         });
         var pos = ['top', 'right', 'bottom', 'left'];
         for (var i = 0; i < pos.length; i++) {
@@ -323,7 +364,7 @@
             'position': 'absolute',
             'borderStyle': 'solid',
             'borderColor': 'transparent',
-            'borderWidth': '20px'
+            'borderWidth': this.ctrlSize/2 + 'px'
         });
 
         var p = {
@@ -342,7 +383,7 @@
         }
         _setStyle(ctrl, another, '100%');
         _setStyle(ctrl, 'border' + _ucfirst(another) + 'Color', '#333');
-        _setStyle(ctrl, 'border' + _ucfirst(another) + 'Width', '40px');
+        _setStyle(ctrl, 'border' + _ucfirst(another) + 'Width', this.ctrlSize + 'px');
         _setStyle(ctrl, 'border' + _ucfirst(pos) + 'Width', '0');
         doms['ctrl'+pos] = ctrl;
         doms.control.appendChild(ctrl);
@@ -438,8 +479,6 @@
     fn.checkComplete = function() {
         if (this.complete) {
             window.alert('结束了，重新开始吧');
-            this.reset();
-            window.debug2048 = this;
         }
     }
     // 是否还有空白区块
