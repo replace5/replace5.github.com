@@ -73,9 +73,9 @@
 
     function _setText(elm, text) {
         try {
-            elm.innerText = text;
-        } catch(e) {
             elm.textContent = text;
+        } catch(e) {
+            elm.innerText = text;
         }
     }
 
