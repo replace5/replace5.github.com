@@ -11,10 +11,7 @@ factory(function() {
             li.style.height = height;
 
             li.innerHTML = ReferrerKiller.imageHtml(li.getAttribute("data-src"), {
-                style: {
-                    width: width,
-                    height: height
-                }
+                style: 'width: ' + width + ';height: '+ height
             });
         }
 
@@ -51,10 +48,7 @@ factory(function() {
                                 li.style.left = -1500 + 'px';
                                 li.style.top = 0;
                                 li.innerHTML = ReferrerKiller.imageHtml(item.src, {
-                                    style: {
-                                        width: width,
-                                        height: height
-                                    }
+                                    style: 'width: ' + width + ';height: '+ height
                                 });
                                 eles.push(li);
                             }
