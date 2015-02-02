@@ -58,26 +58,30 @@
     }
 </style>
 <ul id="test">
-    <li data-src="http://pic.tingbuxia.com/120423/9164_0021335180134.jpg" width="280" height="418"></li>
-    <li data-src="http://pic.tingbuxia.com/121213/9447_0041355401836.jpg" width="280" height="420"></li>
-    <li data-src="http://pic.tingbuxia.com/121213/9444_0121355401750.jpg" width="280" height="186"></li>
-    <li data-src="http://pic.tingbuxia.com/120601/9320_0061338557292.jpg" width="280" height="408"></li>
-    <li data-src="http://pic.tingbuxia.com/120813/9416_0041344791337.jpg" width="280" height="420"></li>
-    <li data-src="http://pic.tingbuxia.com/121213/9446_0061355401820.jpg" width="280" height="420"></li>
-    <li data-src="http://pic.tingbuxia.com/121213/9445_0161355401804.jpg" width="280" height="185"></li>
-    <li data-src="http://pic.tingbuxia.com/121213/9444_0041355401743.jpg" width="280" height="420"></li>
-    <li data-src="http://pic.tingbuxia.com/121213/9444_0161355401755.jpg" width="280" height="186"></li>
-    <li data-src="http://pic.tingbuxia.com/120601/9319_0011338557276.jpg" width="280" height="167"></li>
-    <li data-src="http://pic.tingbuxia.com/120605/9339_0081338907412.jpg" width="280" height="417"></li>
-    <li data-src="http://pic.tingbuxia.com/120605/9338_0061338907380.jpg" width="280" height="416"></li>
+    <li data-src="http://pic.tingbuxia.com/120423/9164_0021335180134.jpg" data-width="280" data-height="418"></li>
+    <li data-src="http://pic.tingbuxia.com/121213/9447_0041355401836.jpg" data-width="280" data-height="420"></li>
+    <li data-src="http://pic.tingbuxia.com/121213/9444_0121355401750.jpg" data-width="280" data-height="186"></li>
+    <li data-src="http://pic.tingbuxia.com/120601/9320_0061338557292.jpg" data-width="280" data-height="408"></li>
+    <li data-src="http://pic.tingbuxia.com/120813/9416_0041344791337.jpg" data-width="280" data-height="420"></li>
+    <li data-src="http://pic.tingbuxia.com/121213/9446_0061355401820.jpg" data-width="280" data-height="420"></li>
+    <li data-src="http://pic.tingbuxia.com/121213/9445_0161355401804.jpg" data-width="280" data-height="185"></li>
+    <li data-src="http://pic.tingbuxia.com/121213/9444_0041355401743.jpg" data-width="280" data-height="420"></li>
+    <li data-src="http://pic.tingbuxia.com/121213/9444_0161355401755.jpg" data-width="280" data-height="186"></li>
+    <li data-src="http://pic.tingbuxia.com/120601/9319_0011338557276.jpg" data-width="280" data-height="167"></li>
+    <li data-src="http://pic.tingbuxia.com/120605/9339_0081338907412.jpg" data-width="280" data-height="417"></li>
+    <li data-src="http://pic.tingbuxia.com/120605/9338_0061338907380.jpg" data-width="280" data-height="416"></li>
 </ul>
 <script src="../libs/referrer-killer.js"></script>
 <script>
     (function() {
-        for (var i = 0, lis = document.getElementById("test").children(); i < lis.length; i++) {
-            lis[i].innerHTML = ReferrerKiller.imageHtml(lis[i].getAttri("data-src"));
+        for (var i = 0, lis = document.getElementById("test").children(); i < lis.length; i++) {\
+            var li = lis[i];
+            li.innerHTML = ReferrerKiller.imageHtml(li.getAttribute("data-src"), {
+                width: li.getAttribute('width'),
+                height: li.getAttribute('height')
+            });
         }
-    });
+    })();
 </script>
 </body>
 </html>
