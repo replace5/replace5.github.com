@@ -2,6 +2,20 @@ factory(function() {
     return function (waterfall, ajax) {
 
         var container = document.getElementById("test");
+
+        for (var i = 0, lis = container.children; i < lis.length; i++) {
+            var li = lis[i];
+            var width = li.getAttribute('data-width') || '';
+            var height = li.getAttribute('data-height') || '';
+            li.style.width = width;
+            li.style.height = height;
+
+            li.innerHTML = ReferrerKiller.imageHtml(li.getAttribute("data-src"), {
+                width: width,
+                height: height
+            });
+        }
+
         var wt = waterfall({
             padding: 10,
             cloumn_width: 300,
@@ -26,15 +40,18 @@ factory(function() {
                             for (var i = 0, len = data.items.length; i< len; i ++) {
                                 if (Math.random() > 0.4) {continue;}
                                 var item = data.items[i];
+                                var width = 280;
+                                var height = item.height*280/item.width;
                                 var li = document.createElement('li');
-                                var img = document.createElement("img");
-                                img.src = item.src;
-                                img.width = 280;
-                                img.height = item.height*280/item.width;
+                                li.width = width;
+                                li.height = height;
                                 li.style.position = 'absolute';
                                 li.style.left = -1500 + 'px';
                                 li.style.top = 0;
-                                li.appendChild(img);
+                                li.innerHTML = ReferrerKiller.imageHtml(item.src, {
+                                    width: width,
+                                    height: height
+                                });
                                 eles.push(li);
                             }
                             return eles;

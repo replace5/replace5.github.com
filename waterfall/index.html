@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>瀑布流</title>
 <script src="../src/loadScript.js"></script>
+<script src="../libs/referrer-killer.js"></script>
 <script>
     loadScript(
         [
@@ -71,22 +72,5 @@
     <li data-src="http://pic.tingbuxia.com/120605/9339_0081338907412.jpg" data-width="280" data-height="417"></li>
     <li data-src="http://pic.tingbuxia.com/120605/9338_0061338907380.jpg" data-width="280" data-height="416"></li>
 </ul>
-<script src="../libs/referrer-killer.js"></script>
-<script>
-    (function() {
-        for (var i = 0, lis = document.getElementById("test").children; i < lis.length; i++) {
-            var li = lis[i];
-            var width = li.getAttribute('data-width') || '';
-            var height = li.getAttribute('data-height') || '';
-            li.style.width = width;
-            li.style.height = height;
-
-            li.innerHTML = ReferrerKiller.imageHtml(li.getAttribute("data-src"), {
-                width: width,
-                height: height
-            });
-        }
-    })();
-</script>
 </body>
 </html>
