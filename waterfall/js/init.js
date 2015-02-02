@@ -5,14 +5,16 @@ factory(function() {
 
         for (var i = 0, lis = container.children; i < lis.length; i++) {
             var li = lis[i];
-            var width = li.getAttribute('data-width') || '';
-            var height = li.getAttribute('data-height') || '';
-            li.style.width = width;
+            var width = (li.getAttribute('data-width') || 0) + 'px';
+            var height = (li.getAttribute('data-height') || 0) + 'px';
+            li.style.width = width
             li.style.height = height;
 
             li.innerHTML = ReferrerKiller.imageHtml(li.getAttribute("data-src"), {
-                width: width,
-                height: height
+                style: {
+                    width: width,
+                    height: height
+                }
             });
         }
 
@@ -40,17 +42,19 @@ factory(function() {
                             for (var i = 0, len = data.items.length; i< len; i ++) {
                                 if (Math.random() > 0.4) {continue;}
                                 var item = data.items[i];
-                                var width = 280;
-                                var height = item.height*280/item.width;
+                                var width = 280 + 'px';
+                                var height = item.height*280/item.width + 'px';
                                 var li = document.createElement('li');
-                                li.width = width;
-                                li.height = height;
+                                li.style.width = width + 'px';
+                                li.style.height = height + 'px';
                                 li.style.position = 'absolute';
                                 li.style.left = -1500 + 'px';
                                 li.style.top = 0;
                                 li.innerHTML = ReferrerKiller.imageHtml(item.src, {
-                                    width: width,
-                                    height: height
+                                    style: {
+                                        width: width,
+                                        height: height
+                                    }
                                 });
                                 eles.push(li);
                             }
