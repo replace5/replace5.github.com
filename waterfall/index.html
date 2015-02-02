@@ -74,11 +74,16 @@
 <script src="../libs/referrer-killer.js"></script>
 <script>
     (function() {
-        for (var i = 0, lis = document.getElementById("test").children(); i < lis.length; i++) {
+        for (var i = 0, lis = document.getElementById("test").children; i < lis.length; i++) {
             var li = lis[i];
+            var width = li.getAttribute('width');
+            var height = li.getAttribute('height');
+            li.style.width = width;
+            li.style.height = height;
+
             li.innerHTML = ReferrerKiller.imageHtml(li.getAttribute("data-src"), {
-                width: li.getAttribute('width'),
-                height: li.getAttribute('height')
+                width: width,
+                height: height
             });
         }
     })();
