@@ -76,8 +76,8 @@
     (function() {
         for (var i = 0, lis = document.getElementById("test").children; i < lis.length; i++) {
             var li = lis[i];
-            var width = li.getAttribute('width');
-            var height = li.getAttribute('height');
+            var width = li.getAttribute('data-width') || '';
+            var height = li.getAttribute('data-height') || '';
             li.style.width = width;
             li.style.height = height;
 
