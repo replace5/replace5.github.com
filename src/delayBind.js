@@ -20,9 +20,12 @@
 
 	function run() {
 		var item, i = 0; len = task.length;
-		for (; i < len; i++) {
+
+		for (; i < len;) {
 			item = task[i];
-			check(item || [], i);
+			if (!check(item || [], i)) {
+				i++;
+			}
 		}
 		if (!task.length) {
 			stop();
@@ -41,7 +44,9 @@
 		if (elm && elm.length) {
 			elm.on(type, cb);
 			task.splice(index, 1);
+			return true;
 		}
+		return false;
 	}
 
 	function delayBind(selector, type,  cb) {
