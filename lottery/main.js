@@ -149,7 +149,8 @@
 		// 延时时间，即停止后延时跳动时长（单位: s）
 		this.delay = delay || 3;
 		// 是否在抽奖中
-		this.busy = false;
+		// 抽奖状态 1: 未开始，2：开始，3：已停止在延时执行
+		this.status = 1;
 		// 员工数据
 		this.data = data.slice(0);
 		// 中奖人员 人员 -> 第几轮中奖
@@ -295,7 +296,19 @@
 		return this;
 	};
 	Lottery.prototype.updateTriggerText = function() {
-		this.doms.trigger.innerText = this.busy ? '停止' : '开始';
+		var text;
+		switch (this.status) {
+			case 1:
+				text = "开始";
+			break;
+			case 2:
+				text = "停止";
+			break;
+			case 3:
+				text = "拼了";
+			break;
+		}
+		this.doms.trigger.innerText = text;
 		return this;
 	};
 	// 绑定事件
@@ -321,9 +334,9 @@
 	};
 	// 点击事件
 	Lottery.prototype._triggerClick = function() {
-		if (this.busy) {
+		if (this.status === 2) {
 			this.stop();
-		} else {
+		} else if (this.status === 1) {
 			this.start();
 		}
 	};
@@ -375,10 +388,10 @@
 	};
 	// 开始抽奖
 	Lottery.prototype.start = function(frequency) {
-		if (!this.busy) {
+		if (this.status === 1) {
 			this.hideFocus();
 			this.stopImmediate();
-			this.busy = true;
+			this.status = 2;
 			this.updateTriggerText();
 			// 初始频率跳动
 			this.run(1000 / this.frequency);
@@ -388,7 +401,9 @@
 	};
 	// 停止抽奖，会延时跳动一段时间
 	Lottery.prototype.stop = function() {
-		if (this.busy) {
+		if (this.status === 2) {
+			this.status = 3;
+			this.updateTriggerText();
 			// 延时执行时，改变抽奖节奏
 			this.run(2000 / this.frequency);
 
@@ -402,7 +417,7 @@
 	};
 	// 立即停止
 	Lottery.prototype.stopImmediate = function() {
-		this.busy = false;
+		this.status = 1;
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
