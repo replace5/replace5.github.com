@@ -34,6 +34,7 @@ factory(function() {
             }
         }
         function loadData() {
+            if (lock) {return false;}
             lock = true;
             ajax({
                 url: 'data/data.json',
