@@ -24,6 +24,7 @@ factory(function() {
         }
 
         var wt = waterfall(options);
+        var lock = false;
         window.onscroll = function() {
             var clientHeight = document[document.compatMode === 'CSS1Compat' ? "documentElement" : "body"].clientHeight,
                 scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop),
@@ -33,10 +34,12 @@ factory(function() {
             }
         }
         function loadData() {
+            lock = true;
             ajax({
                 url: 'data/data.json',
                 type: 'GET',
                 complete: function(err, data) {
+                    lock = false;
                     if (!err) {
                         wt.append(function() {
                             var eles = [];
