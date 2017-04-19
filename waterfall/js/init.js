@@ -17,7 +17,7 @@ factory(function() {
 
         var wt = waterfall({
             padding: 10,
-            cloumn_width: 300,
+            cloumn_width: 250,
             container: container
         });
         window.onscroll = function() {
