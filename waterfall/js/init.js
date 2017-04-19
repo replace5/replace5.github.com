@@ -50,8 +50,8 @@ factory(function() {
                                 var width = (options.cloumn_width - cloumn_padding) + 'px';
                                 var height = item.height*(options.cloumn_width - cloumn_padding)/item.width + 'px';
                                 var li = document.createElement('li');
-                                li.style.width = width + 'px';
-                                li.style.height = height + 'px';
+                                li.style.width = width;
+                                li.style.height = height;
                                 li.style.position = 'absolute';
                                 li.style.left = -1500 + 'px';
                                 li.style.top = 0;
