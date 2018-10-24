@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        input {
+            box-sizing: border-box;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            padding: 0;
+            font-size: 15px;
+            text-align: center;
+            border: 0;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        ul > li {
+            list-style: none;
+            width: 65px;
+            height: 65px;
+            line-height: 65px;
+            padding: 0;
+            font-size: 15px;
+            text-align: center;
+            color:blue;
+        }
+        .list1 {
+            float: none;
+            clear: both;
+            height: 65px;
+            margin-left: 65px;
+        }
+        .list1 li {
+            float: left;
+        }
+        .list2 {
+            float: left;
+            width: 65px;
+        }
+        table{
+            float: left;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid #000;
+            padding: 2px;
+        }
+        button {
+            margin-top: 165px;
+            margin-left: 100px;
+            width: 100px;
+            height: 65px;
+            line-height: 63px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<ul class="list1">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+</ul>
+<ul class="list2">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+</ul>
+<table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+    </tr>
+</table>
+<button>求解</button>
+<!-- <script src="./data.js"></script> -->
+<script src="./calc.js"></script>
+<script src="./get_data_from_html.js"></script>
+<script src="./set_data_to_html.js"></script>
+<script>
+    var button = document.getElementsByTagName('button')[0];
+    var before = true;
+    button.addEventListener('click', function() {
+        var table = document.getElementsByTagName('table')[0];
+        var data = get_data_from_html(table);
+        
+        var ret = SD_CALC(data);
+        if (typeof ret === 'string') {
+            alert(ret);
+            return false;
+        }
+
+        set_data_to_html(table, data, true);
+    });
+    var inputs = document.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length;i++) {
+        inputs[i].addEventListener('change', function(evt) {
+            if (evt.target.value.trim() && before) {
+                evt.target.style.backgroundColor = '#ddd';
+                evt.target.parentNode.style.backgroundColor = '#ddd';
+            }
+        })
+    }
+</script>
+</body>
+</html>
