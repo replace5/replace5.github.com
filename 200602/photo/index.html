@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>06届(2)班初中同学</title>
+    <style>
+      ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        background-color: #f5f5f5;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background-color: #f5f5f5;
+      }
+      ::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+        background-color: #a9a9a9;
+      }
+    </style>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f6f6f6;
+      }
+      li {
+        list-style: none;
+      }
+      .list {
+        width: 1440px;
+        margin: 50px auto;
+        columns: 5;
+        column-gap: 30px;
+      }
+      .item {
+        background: #fff;
+        width: 100%;
+        break-inside: avoid;
+        margin-bottom: 30px;
+        cursor: pointer;
+      }
+      .item img {
+        width: 100%;
+        vertical-align: top;
+      }
+      .item h2 {
+        font-size: 18px;
+        text-align: center;
+        margin: 0;
+        padding: 8px;
+        color: #333;
+      }
+      .list.thumb {
+        margin: 0;
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        overflow-x: scroll;
+        columns: auto;
+        column-gap: unset;
+        display: flex;
+        flex-direction: row;
+      }
+      /* .list.thumb::-webkit-scrollbar {
+        display: none;
+      } */
+      .list.thumb .item {
+        width: auto;
+        height: 80px;
+        margin: 0 5px;
+        margin-bottom: 0;
+        border: 2px solid transparent;
+      }
+      .list.thumb .item.active {
+        border-color: rgb(230, 116, 10);
+      }
+      .list.thumb .item img {
+        height: 100%;
+        width: auto;
+      }
+      .list.thumb .item h2 {
+        display: none;
+      }
+      @media screen and (max-width: 767.98px) {
+        .list {
+          width: 96vw;
+          columns: 2;
+        }
+      }
+      .lightbox {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        padding-top: 30px;
+        padding-bottom: 100px;
+        background: rgba(0, 0, 0, 0.85);
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .lightbox img {
+        max-height: calc(100vh - 200px);
+        max-width: 90vw;
+      }
+      .lightbox h2 {
+        color: #fff;
+        margin-top: 15px;
+        text-align: center;
+      }
+      .lightbox .close {
+        position: absolute;
+        right: 50px;
+        top: 50px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        background: #fff;
+        border-radius: 50%;
+        z-index: 2;
+        text-align: center;
+        font-size: 20px;
+        color: #777;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lightbox">
+      <span class="close">X</span>
+      <div class="content"></div>
+    </div>
+    <script>
+      const images = ["但都都-1.jpg","但都都-2.jpg","刘敏-1.jpg","刘敏-2.jpg","周远新.jpg","李娟.jpg","李晓佳-1.jpg","李晓佳-2.jpg","李晓佳-3.jpg","李晓佳-4.jpg","李晓佳-5.jpg","李晓佳-6.jpg","武勇.jpg","詹磊-1.jpg","詹磊-2.jpg","詹磊-3.jpg","詹磊-4.jpg","郑晓情-1.jpg","郑晓情-2.jpg","陈俊.jpg","陈智璐.jpg","陈燃冰.jpg"];
+      const listHtml = images
+        .map((img) => `<div class="item"><img src="./${img}" /><h2>${img.split(".").shift().split('-').shift()}</h2></div>`)
+        .join('');
+      const html = [`<div class="list">${listHtml}</div>`];
+      document.write(html);
+
+      const list = document.querySelector(".list");
+      const lightbox = document.querySelector(".lightbox");
+      const lightboxContent = document.querySelector(".lightbox>.content");
+      const lightboxClose = document.querySelector(".lightbox>.close");
+      list.addEventListener("click", (evt) => {
+        let target = evt.target;
+        let item = target.closest(".item");
+        if (item) {
+          let active = document.querySelector(".active")
+          if (active) {
+            active.classList.remove("active");
+          }
+          item.classList.add("active");
+          lightboxContent.innerHTML = item.innerHTML;
+          list.classList.add("thumb");
+          lightbox.style.display = "flex";
+        }
+      });
+      lightboxClose.addEventListener("click", () => {
+        lightbox.style.display = "none";
+        list.classList.remove("thumb");
+      })
+    </script>
+  </body>
+</html>
