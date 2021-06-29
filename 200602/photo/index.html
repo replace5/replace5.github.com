@@ -34,8 +34,8 @@
         list-style: none;
       }
       .list {
-        width: 1440px;
-        margin: 50px auto;
+        width: 1200px;
+        margin: 30px auto;
         columns: 5;
         column-gap: 30px;
       }
@@ -91,8 +91,13 @@
       }
       @media screen and (max-width: 767.98px) {
         .list {
-          width: 96vw;
+          width: calc(100vw - 20px);
           columns: 2;
+          margin: 10px;
+          column-gap: 10px;
+        }
+        .item {
+          margin-bottom: 10px;
         }
       }
       .lightbox {
@@ -120,8 +125,8 @@
       }
       .lightbox .close {
         position: absolute;
-        right: 50px;
-        top: 50px;
+        right: 40px;
+        top: 40px;
         width: 30px;
         height: 30px;
         line-height: 30px;
@@ -131,6 +136,7 @@
         text-align: center;
         font-size: 20px;
         color: #777;
+        font-family: sans-serif;
         cursor: pointer;
       }
     </style>
@@ -143,7 +149,7 @@
     <script>
       const images = ["但都都-1.jpg","但都都-2.jpg","刘敏-1.jpg","刘敏-2.jpg","周远新.jpg","李娟.jpg","李晓佳-1.jpg","李晓佳-2.jpg","李晓佳-3.jpg","李晓佳-4.jpg","李晓佳-5.jpg","李晓佳-6.jpg","武勇.jpg","詹磊-1.jpg","詹磊-2.jpg","詹磊-3.jpg","詹磊-4.jpg","郑晓情-1.jpg","郑晓情-2.jpg","陈俊.jpg","陈智璐.jpg","陈燃冰.jpg"];
       const listHtml = images
-        .map((img) => `<div class="item"><img src="./${img}" /><h2>${img.split(".").shift().split('-').shift()}</h2></div>`)
+        .map((img, i) => `<div data-index="${i}" class="item"><img src="./${img}" /><h2>${img.split(".").shift().split('-').shift()}</h2></div>`)
         .join('');
       const html = [`<div class="list">${listHtml}</div>`];
       document.write(html);
@@ -155,6 +161,14 @@
       list.addEventListener("click", (evt) => {
         let target = evt.target;
         let item = target.closest(".item");
+        setActive(item);
+      });
+      lightboxClose.addEventListener("click", () => {
+        lightbox.style.display = "none";
+        list.classList.remove("thumb");
+      })
+      let index = 0;
+      function setActive(item) {
         if (item) {
           let active = document.querySelector(".active")
           if (active) {
@@ -164,12 +178,36 @@
           lightboxContent.innerHTML = item.innerHTML;
           list.classList.add("thumb");
           lightbox.style.display = "flex";
+          index = +item.dataset.index;
         }
-      });
-      lightboxClose.addEventListener("click", () => {
-        lightbox.style.display = "none";
-        list.classList.remove("thumb");
-      })
+      }
+
+      function move(dir) {
+        let i = index + dir;
+        setActive(document.querySelector(`.item[data-index="${i}"]`));
+      }
+
+      if ("ontouchstart" in window) {
+        let start = 0;
+        let end = 0;
+        const touchstart = (evt) => {
+          start = evt.touches[0].pageX;
+          lightboxContent.addEventListener("touchmove", touchmove, false);
+          lightboxContent.addEventListener("touchend", touchend, false);
+        }
+        const touchmove = (evt) => {
+          end = evt.touches[0].pageX;
+        }
+        const touchend = (evt) => {
+          let distance = end - start;
+          if (end && Math.abs(distance) > 50) {
+            move(distance > 0 ? -1 : 1);
+          }
+          lightboxContent.removeEventListener("touchmove", touchmove, false);
+          lightboxContent.removeEventListener("touchend", touchend, false);
+        }
+        lightboxContent.addEventListener("touchstart", touchstart, false);
+      }
     </script>
   </body>
 </html>
