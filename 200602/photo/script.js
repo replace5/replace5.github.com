@@ -10,7 +10,7 @@ fs.readdir("./", (err, files) => {
     }
   })
 
-  fs.readFile("./index.html", "utf8" ,(err, content) => {
+  fs.readFile("./tpl.html", "utf8" ,(err, content) => {
     content = content.replace(/'{images}'/, JSON.stringify(images));
     fs.writeFile("./index.html", content, "utf8", () => {
       console.log("end");
